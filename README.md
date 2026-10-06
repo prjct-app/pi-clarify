@@ -1,6 +1,6 @@
 # pi-clarify
 
-[![pi-clarify — for PI Agent](https://raw.githubusercontent.com/prjct-app/pi-local-extensions/main/pi-clarify/docs/cover-v2.png)](https://pi.dev)
+[![pi-clarify — for PI Agent](https://raw.githubusercontent.com/prjct-app/pi-clarify/main/docs/cover-v2.png)](https://pi.dev)
 
 Interactive clarification panel for Pi. The model calls `clarify` with a short batch of single-choice, multiple-choice, or free-text questions. Every choice question identifies its most viable option, which the panel marks as `(recomendada)` without changing the recorded answer. The panel shows progress, supports revising answers, requires explicit submission, and returns all answers to the agent. Esc cancels without recording decisions. `/clarify <question>` opens a single free-text question manually and submits the answer as a follow-up user message.
 
