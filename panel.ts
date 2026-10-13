@@ -38,10 +38,10 @@ async function choose(question: Question, current: string | readonly string[] | 
 export async function clarify(ctx: ExtensionContext, questions: readonly Question[]): Promise<ClarificationResult> {
   if (!ctx.hasUI || ctx.mode !== 'tui') throw new Error('Clarification requires an interactive Pi terminal.');
   const answers: Record<string, string | readonly string[]> = {};
-  let focus = questions[0]?.id;
+  const cursor = { focus: questions[0]?.id, intent: undefined as Intent | undefined };
   while (true) {
-    let intent: Intent | undefined;
-    const request = (action: Intent, close: () => void): void => { intent = action; close(); };
+    cursor.intent = undefined;
+    const request = (action: Intent, close: () => void): void => { cursor.intent = action; close(); };
     const spec: PanelSpec = {
       title: 'Clarificación',
       summary: () => `${Object.keys(answers).length}/${questions.length} respondidas`,
@@ -61,7 +61,7 @@ export async function clarify(ctx: ExtensionContext, questions: readonly Questio
           sections: question.options?.length ? [{ title: 'Opciones', lines: question.options.map(option => displayOption(question, option)) }] : [],
         };
       },
-      initial: focus,
+      initial: cursor.focus,
       actions: [
         { key: 'a', label: 'Responder', run: (item, panel) => { if (item) request({ action: 'edit', id: item.id }, panel.close); } },
         { key: 's', label: 'Enviar respuestas', run: (_item, panel) => {
@@ -73,10 +73,11 @@ export async function clarify(ctx: ExtensionContext, questions: readonly Questio
       activate: { label: 'Responder', run: (item, panel) => { if (item) request({ action: 'edit', id: item.id }, panel.close); } },
     };
     await ctx.ui.custom<null>((tui, theme, _keys, done) => createPanel(spec, tui, theme, () => done(null)));
+    const intent = cursor.intent as Intent | undefined;
     if (!intent || intent.action === 'cancel') return { status: 'cancelled' };
     if (intent.action === 'submit') return { status: 'answered', answers: { ...answers }, text: responseText(questions, answers) };
     const editId = intent.id;
-    focus = editId;
+    cursor.focus = editId;
     const question = questions.find(entry => entry.id === editId)!;
     const answer = await choose(question, answers[question.id], ctx.ui);
     if (answer !== undefined) {

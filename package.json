@@ -1,6 +1,6 @@
 {
   "name": "@prjct.app/pi-clarify",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Interactive clarification panel for Pi",
   "type": "module",
   "license": "MIT",
@@ -41,7 +41,7 @@
   ],
   "scripts": {
     "check": "tsc --noEmit",
-    "test": "node --import tsx --test --test-concurrency=1 tests/*.test.ts",
+    "test": "export PI_CODING_AGENT_DIR=\"$(mktemp -d)\" PRJCT_HOME=\"$(mktemp -d)\" && node --import tsx --test --test-concurrency=1 tests/*.test.ts",
     "check:package": "npm pack --dry-run --ignore-scripts",
     "build:pi": "node scripts/build-pi.mjs",
     "audit:runtime": "node scripts/audit-production.mjs"

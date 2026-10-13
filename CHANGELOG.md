@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 — 2026-10-12
+
+- Code: no `let` bindings; mutable state lives in one named object. Behaviour is unchanged.
+- Tests run with temporary Pi and prjct folders, so they never touch your real configuration.
+
 ## 0.1.3 — 2026-10-11
 
 - `clarify` is `model-only`: it waits for the person, so codemode scripts cannot call it.
